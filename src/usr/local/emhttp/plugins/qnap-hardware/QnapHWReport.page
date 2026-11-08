@@ -1,0 +1,27 @@
+Menu="QnapHW:4"
+Title="Report"
+Tag="bug"
+Markdown="false"
+---
+<?php
+/* Report: collect a read-only hardware report (include/report.php runs scripts/qnaphw-report and anonymises it), preview,
+ * Copy, Download, and a link that opens an issue form in the user's own browser. Nothing is sent from the server. */
+require_once "$docroot/plugins/qnap-hardware/include/qnaphw.php";
+qnaphw_head();
+?>
+<div class="qhw">
+<div class="title"><span class="left"><i class="fa fa-bug title"></i>Report unsupported hardware</span></div>
+<p class="qhw-p">Is your QNAP enclosure or card not recognised, drawn wrong, or a bay in the wrong place? Collect a hardware report here, check it, and send it as an issue. The report is made on this server and <b>anonymised before you see it</b>: serial numbers, MAC addresses, WWNs, UUIDs, labels, the hostname, IP addresses and user names become placeholders such as <code>&lt;serial-1&gt;</code>. It only leaves this server through your own browser, when you copy it, download it or open the issue form.</p>
+<div class="qhw-bar">
+<input type="button" id="qnaphw-report-collect" value="Collect report">
+<input type="button" id="qnaphw-report-copy" value="Copy" disabled>
+<input type="button" id="qnaphw-report-download" value="Download (.txt)" disabled>
+<input type="button" id="qnaphw-report-issue" value="Open GitHub issue" disabled>
+<span id="qnaphw-report-state" role="status" aria-live="polite">Nothing collected yet.</span>
+</div>
+<h3 class="qhw-cap" id="qnaphw-report-label">Report preview (anonymised; read-only)</h3>
+<textarea id="qnaphw-report-text" aria-labelledby="qnaphw-report-label" class="qhw-report" readonly spellcheck="false" rows="22" placeholder="Click &quot;Collect report&quot;. It takes a few seconds; no drive is woken."></textarea>
+<p class="qhw-p"><b>What is collected</b> (read-only, <code>scripts/qnaphw-report</code>): the Unraid and kernel versions, DMI names and BIOS version, CPU and memory size, <code>lspci -nn</code> and <code>lspci -tvnn</code>, the ids, subsystem, driver, links and PCIe error counters of every ASMedia, Marvell and QNAP device, the AHCI capabilities of each controller, the SATA ports with a link, each drive's model, firmware and path (no serial is read), <code>lsusb</code>, the hwmon sensor names, relevant <code>dmesg</code> lines and this plugin's view (units, bays, links, known issues). No drive is opened, so none can wake up.</p>
+<p class="qhw-p"><b>Anonymiser</b> (<code>include/qnaphw-anon.php</code>): first the values this server knows are replaced (drive and USB serials, DMI serials and UUID, the hostname, users with uid 1000 and up, file system labels), then patterns catch the rest (MAC, WWN, UUID, LABEL= and UUID= values, IPv4 and IPv6 addresses, serial-number fields). The same value always gets the same placeholder. Read the preview before sending, and edit the downloaded file if you see anything you would rather not share.</p>
+</div>
+<script src="/plugins/qnap-hardware/js/qnaphw-report.js?v=<?=qnaphw_h(substr((string)@md5_file("$docroot/plugins/qnap-hardware/js/qnaphw-report.js"), 0, 10))?>"></script>

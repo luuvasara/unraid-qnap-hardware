@@ -1,0 +1,28 @@
+Menu="QnapHW:2"
+Title="History"
+Tag="line-chart"
+Markdown="false"
+---
+<?php
+/* History: drive temperatures per bay over time, from the sampler's RAM file (one sample a minute, 24 h). Graphs: uPlot 1.6.32
+ * (MIT), shipped in vendor/; the page loads nothing from the internet. The same numbers as text: the table under each graph. */
+require_once "$docroot/plugins/qnap-hardware/include/qnaphw.php";
+qnaphw_head();
+$qhv = substr((string)@md5_file("$docroot/plugins/qnap-hardware/js/qnaphw-charts.js"), 0, 10);
+?>
+<link rel="stylesheet" href="/plugins/qnap-hardware/vendor/uplot-1.6.32/uPlot.min.css">
+<div class="qhw" id="qhw-history" data-endpoint="/plugins/qnap-hardware/include/history.php">
+<div class="title"><span class="left"><i class="fa fa-line-chart title"></i>Drive temperatures</span></div>
+<div class="qhw-bar">
+<fieldset class="qhw-range"><legend>Time range</legend>
+<label><input type="radio" name="qhw-range" value="3600"> 1 h</label>
+<label><input type="radio" name="qhw-range" value="21600"> 6 h</label>
+<label><input type="radio" name="qhw-range" value="86400" checked> 24 h</label>
+</fieldset>
+</div>
+<p class="qhw-p" data-qhw="msg" role="status" aria-live="polite"><noscript>The graphs need JavaScript.</noscript></p>
+<div data-qhw="charts"></div>
+<p class="qhw-p">One sample a minute of the temperature Unraid last read of each drive in a bay (Overview, Temperature history). A gap is a drive in standby (it is never woken to read it) or a minute without a sample. The history is kept in RAM: it starts empty at every boot. Hover a graph for the values at that time.</p>
+</div>
+<script src="/plugins/qnap-hardware/vendor/uplot-1.6.32/uPlot.iife.min.js"></script>
+<script src="/plugins/qnap-hardware/js/qnaphw-charts.js?v=<?=qnaphw_h($qhv)?>"></script>

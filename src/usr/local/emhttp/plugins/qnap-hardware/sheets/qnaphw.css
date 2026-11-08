@@ -1,0 +1,28 @@
+/* qnap-hardware pages. Unraid's own table, form and text-colour classes; no text or page colour is set here (borders use
+ * currentColor), so all four themes work. Spacing on a 4 px grid. The front view's styles come from kit/enclosures.css. */
+.qhw .qhw-p { max-width: 62em; margin: 8px 0 12px; text-align: left; }
+.qhw .qhw-sub { margin-left: 16px; font-weight: normal; }
+.qhw .qhw-small { font-weight: normal; }
+.qhw .qhw-cap { caption-side: top; text-align: left; font-weight: bold; font-size: 1em; padding: 8px 0 4px; margin: 0; }
+.qhw .qhw-scroll { overflow-x: auto; margin: 0 0 16px; }
+.qhw table.qhw-t { width: 100%; margin: 0; }
+.qhw table.qhw-t th[scope=row] { text-align: left; font-weight: bold; vertical-align: top; }
+.qhw table.qhw-t td { vertical-align: top; white-space: normal; }
+.qhw table.qhw-issues th[scope=row] { width: 18em; }
+.qhw dl.qhw-facts { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; margin: 8px 0 16px; max-width: 72em; }
+.qhw dl.qhw-facts dt, .qhw dl.qhw-facts dd { display: block; margin: 0; padding: 0; width: auto; float: none; text-align: left; }
+.qhw dl.qhw-facts dt { font-weight: bold; }
+.qhw fieldset { border: 1px solid currentColor; border-radius: 4px; padding: 8px 16px; margin: 16px 0; max-width: 62em; }
+.qhw legend { font-weight: bold; padding: 0 4px; }
+.qhw .qhw-field { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 4px 0; }
+.qhw .qhw-field label { flex: 0 0 18em; margin: 0; }
+.qhw .qhw-field select, .qhw .qhw-field input { margin: 0; width: auto; min-width: 8em; }
+.qhw .qhw-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 8px 0; }
+.qhw .qhw-bar input { margin: 0; }
+.qhw .qhw-range { display: flex; gap: 16px; border: 1px solid currentColor; border-radius: 4px; padding: 4px 12px; margin: 0; }
+.qhw .qhw-range label { margin: 0; }
+.qhw .qhw-hist { margin: 0 0 24px; }
+.qhw table.qhw-hist-t { width: auto; min-width: 32em; }
+.qhw .qhw-chart { max-width: 1200px; }
+.qhw .uplot, .qhw .u-legend { color: inherit; }
+.qhw .qhw-report { width: 100%; max-width: 72em; font-family: monospace; font-size: 0.9em; box-sizing: border-box; }

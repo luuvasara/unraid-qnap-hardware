@@ -1,0 +1,6 @@
+Menu="Utilities"
+Type="xmenu"
+Title="QNAP Hardware"
+Icon="qnap-hardware.png"
+Tag="th"
+Tabs="true"

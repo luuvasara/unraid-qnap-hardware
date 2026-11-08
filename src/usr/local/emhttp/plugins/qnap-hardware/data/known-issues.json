@@ -1,0 +1,59 @@
+{
+  "updated": "2026-11-08",
+  "issues": [
+    {
+      "id": "link-trained-down",
+      "title": "A PCIe link of the card runs below what both ends can do",
+      "check": "links",
+      "text": "The card or one of its controllers trained to a lower speed or fewer lanes than the slot and the card support. Usual causes: a slot that shares lanes with another slot or an M.2 socket, a riser, or a card not fully seated. Check the motherboard manual for lane sharing and reseat the card.",
+      "source": "PCIe link state from sysfs (current_link_* against max_link_* of both ends)"
+    },
+    {
+      "id": "pcie-errors",
+      "title": "PCIe errors counted on the card",
+      "check": "aer",
+      "text": "The card's switch or controllers counted PCIe errors since boot (AER). A few correctable errors are fixed by the link itself; a growing count points at the slot, a riser or the card's seating.",
+      "source": "AER counters from sysfs (aer_dev_correctable, aer_dev_nonfatal, aer_dev_fatal)"
+    },
+    {
+      "id": "sata-link-slow",
+      "title": "A drive's SATA link runs below the port's speed",
+      "check": "sata",
+      "text": "A drive linked at a lower SATA speed than the port supports. Older drives link at 3.0 Gbps by design; for a 6 Gbps drive, reseat it in its tray and check the cable between card and enclosure.",
+      "source": "SATA link speed from sysfs (ata_link sata_spd against hw_sata_spd_limit)"
+    },
+    {
+      "id": "cabling-not-confirmed",
+      "title": "Cabling not confirmed",
+      "check": "cabling",
+      "text": "Which controller of the card feeds which group of bays depends on how the four cables are plugged. Until the cabling is confirmed with Locate, the bays follow the unit the profile was measured on.",
+      "source": "Enclosure profile of the plugin kit"
+    },
+    {
+      "id": "cold-start-missing",
+      "title": "Drives missing after a cold start",
+      "check": "info",
+      "text": "Users of these enclosures with ASM1164 cards report drives that do not show up after the server and the enclosure were started together, until the enclosure is power-cycled or the drive reseated. Switch the enclosure on first and give it a few seconds before the server, as QNAP's guide describes.",
+      "source": "Community reports (Unraid forum, TL-D800S with QXP-800eS-A1164); QNAP TL-D400S/D800S/D1600S user guide, connection order"
+    },
+    {
+      "id": "hot-swap",
+      "title": "A hot-swapped drive is not seen until the enclosure is power-cycled",
+      "check": "info",
+      "text": "Users report that a drive put into a running enclosure on the QXP card can stay invisible until the enclosure is switched off and on. Plan drive replacements with the array stopped.",
+      "source": "Community reports (r/qnap, TL-D1600S)"
+    }
+  ],
+  "firmware": [
+    {
+      "part": "Enclosure firmware",
+      "text": "Not readable from the server: the enclosure has no management link the server can see (no SES device, no USB link, no AHCI enclosure management). The LCD shows the name and firmware version (press Enter). Updates are made with QNAP's JBOD Manager (Windows or Ubuntu) or a QNAP NAS; QNAP's advice if an update fails is to power on the enclosure without drives, wait 10 minutes and update again.",
+      "source": "QNAP JBOD Enclosure Software user guide; QNAP FAQ on TL-D1600S firmware updates"
+    },
+    {
+      "part": "QXP card",
+      "text": "The card has no firmware the server can read or update; its controllers run on the kernel's standard ahci driver. The earlier QXP-1600eS with a Marvell 88SE1475, shipped before February 2022, needs QNAP's own driver and is not recognised here.",
+      "source": "QNAP TL-D1600S product page"
+    }
+  ]
+}

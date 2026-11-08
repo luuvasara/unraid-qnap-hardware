@@ -1,0 +1,18 @@
+#!/usr/bin/php
+<?php
+/* qnaphw-sample - one history sample: the temperature of every drive in an enclosure bay, as Unraid last read it (no drive is
+ * opened, so none is woken). Run once a minute by cron (/boot/config/plugins/qnap-hardware/qnap-hardware.cron) while HISTORY is
+ * yes. Appends one line to /var/run/qnap-hardware/history (RAM; empty after a reboot) and keeps the last 24 h. */
+require_once dirname(__DIR__) . '/include/qnaphw.php';
+if (qnaphw_cfg()['HISTORY'] === 'no') exit(0);
+$dir = qnaphw_run();
+@mkdir($dir, 0755, true);
+$f = "$dir/history";
+$fp = @fopen("$dir/history.lock", 'c');
+if (!$fp || !flock($fp, LOCK_EX | LOCK_NB)) exit(0);   // the previous run is still going
+$line = qnaphw_sample_line(qnaphw_view(), time());
+$old = @file($f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [];
+$old[] = $line;
+$keep = array_slice($old, -QNAPHW_HISTORY_LINES);
+file_put_contents("$f.new", implode("\n", $keep) . "\n");
+rename("$f.new", $f);

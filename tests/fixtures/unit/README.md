@@ -1,0 +1,1 @@
+`lspci -nn` and `lspci -tvnn` of the enclosure's card, as read on a server with a TL-D1600S on 2026-11-08 (the card's subtree only; no serials in either). Used by tests/report-test.sh through stub `lspci` commands.

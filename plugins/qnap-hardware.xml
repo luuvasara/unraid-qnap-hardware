@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Plugin>
+  <Name>QNAP Hardware</Name>
+  <PluginURL>https://raw.githubusercontent.com/luuvasara/unraid-qnap-hardware/main/qnap-hardware.plg</PluginURL>
+  <Support>https://github.com/luuvasara/unraid-qnap-hardware/issues</Support>
+  <Project>https://github.com/luuvasara/unraid-qnap-hardware</Project>
+  <Icon>https://raw.githubusercontent.com/luuvasara/unraid-qnap-hardware/main/icon.png</Icon>
+  <Category>Tools:System</Category>
+  <MinVer>6.12.0</MinVer>
+  <License>GPL-2.0</License>
+  <ReadMe>https://github.com/luuvasara/unraid-qnap-hardware#readme</ReadMe>
+  <ExtraSearchTerms>qnap tl-d1600s qxp jbod enclosure bay temperature history</ExtraSearchTerms>
+  <Overview>A live overview of the QNAP TL-D1600S JBOD enclosure under Unraid.
+
+- A front view with each drive in its bay, its slot, temperature and state; no drive is woken.
+- Bay labels on the Main page.
+- Drive temperature history per bay.
+- A hardware inventory with known issues and firmware.
+- A Report tab that anonymises what your unit looks like, for support of other models.
+
+For the card checks, Locate and the cabling check, install the companion plugin, QNAP Expansion.</Overview>
+</Plugin>

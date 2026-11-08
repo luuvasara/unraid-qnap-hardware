@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommunityApplications>
+  <Profile>QNAP Hardware for Unraid shows the QNAP TL-D1600S JBOD enclosure: a live front view, bay labels on the Main page, temperature history, a hardware inventory with known issues and an anonymised hardware report. Support and questions: the GitHub issues of this repository.</Profile>
+  <Icon>https://raw.githubusercontent.com/luuvasara/unraid-qnap-hardware/main/icon.png</Icon>
+  <WebPage>https://github.com/luuvasara/unraid-qnap-hardware</WebPage>
+</CommunityApplications>

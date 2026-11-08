@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <title>QNAP Hardware</title>
+  <rect x="8" y="8" width="240" height="240" rx="44" fill="#1f3b2c"/>
+  <rect x="28" y="76" width="200" height="120" rx="10" fill="none" stroke="#d9e2ec" stroke-width="6"/>
+  <rect x="40" y="96" width="18" height="30" rx="2" fill="#d9e2ec"/><rect x="62" y="96" width="18" height="30" rx="2" fill="#d9e2ec"/><rect x="84" y="96" width="18" height="30" rx="2" fill="#f0a202"/><rect x="106" y="96" width="18" height="30" rx="2" fill="#d9e2ec"/><rect x="128" y="104" width="18" height="22" rx="2" fill="#d9e2ec"/><rect x="150" y="104" width="18" height="22" rx="2" fill="#d9e2ec"/><rect x="172" y="104" width="18" height="22" rx="2" fill="#d9e2ec"/><rect x="194" y="104" width="18" height="22" rx="2" fill="#d9e2ec"/><rect x="40" y="146" width="18" height="30" rx="2" fill="#d9e2ec"/><rect x="62" y="146" width="18" height="30" rx="2" fill="#d9e2ec"/><rect x="84" y="146" width="18" height="30" rx="2" fill="#d9e2ec"/><rect x="106" y="146" width="18" height="30" rx="2" fill="#d9e2ec"/><rect x="128" y="146" width="18" height="30" rx="2" fill="#d9e2ec"/><rect x="150" y="146" width="18" height="30" rx="2" fill="#d9e2ec"/><rect x="172" y="146" width="18" height="30" rx="2" fill="#d9e2ec"/><rect x="194" y="146" width="18" height="30" rx="2" fill="#d9e2ec"/>
+  <circle cx="200" cy="56" r="7" fill="#f0a202"/><path d="M40 60 L64 48 L88 56 L112 40 L136 52" fill="none" stroke="#d9e2ec" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M48 204 H76 M180 204 H208" stroke="#d9e2ec" stroke-width="8" stroke-linecap="round"/>
+</svg>

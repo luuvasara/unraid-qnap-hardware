@@ -1,0 +1,69 @@
+Menu="QnapHW:3"
+Title="Hardware"
+Tag="microchip"
+Markdown="false"
+---
+<?php
+/* Hardware: the inventory of each enclosure (card, PCIe links and error counters, controllers and SATA ports, drives with
+ * firmware and SMART counters as Unraid last read them), known issues and firmware. READ-ONLY: sysfs and Unraid's files. */
+require_once "$docroot/plugins/qnap-hardware/include/issues.php";
+qnaphw_head();
+$hv = qnaphw_view();
+$hicon = ['ok' => 'fa-check green-text', 'warn' => 'fa-warning orange-text', 'info' => 'fa-info-circle'];
+$huv = @parse_ini_file(qnaphw_root() . '/etc/unraid-version') ?: [];
+?>
+<div class="qhw">
+<div class="title"><span class="left"><i class="fa fa-server title"></i>Server</span></div>
+<dl class="qhw-facts">
+  <dt>Unraid</dt><dd><?=qnaphw_h($huv['version'] ?? 'unknown')?></dd>
+  <dt>Kernel</dt><dd><?=qnaphw_h(trim((string)@file_get_contents(qnaphw_root() . '/proc/sys/kernel/osrelease')) ?: php_uname('r'))?></dd>
+  <dt>Enclosures</dt><dd><?=qnaphw_h($hv['units'] ? implode(', ', array_map(function ($u) { return "{$u['name']} {$u['unit']} ({$u['card']} at {$u['switch']})"; }, $hv['units'])) : 'none found')?></dd>
+</dl>
+<?php foreach ($hv['units'] as $u): $n = "{$u['name']} {$u['unit']}"; ?>
+<div class="title"><span class="left"><i class="fa fa-microchip title"></i><?=qnaphw_h("$n: card")?></span></div>
+<div class="qhw-scroll"><table class="unraid qhw-t">
+<caption class="qhw-cap">PCIe: the card's switch and its controllers</caption>
+<thead><tr><th scope="col">Part</th><th scope="col">Address</th><th scope="col">Driver</th><th scope="col">Link now</th><th scope="col">Link possible</th><th scope="col">PCIe errors <span class="qhw-small">(correctable / non-fatal / fatal)</span></th></tr></thead><tbody>
+<?php foreach ($u['links'] as $l):
+  $c = null; foreach ($u['hw']['controllers'] as $x) if ($x['address'] === $l['to']) $c = $x;
+  $aer = $c ? $c['aer'] : $u['hw']['switch_aer']; ?>
+<tr><th scope="row"><?=qnaphw_h($l['what'] === 'card' ? "Switch (the card's link to the slot)" : $l['name'])?></th><td><?=qnaphw_h($l['to'])?></td><td><?=qnaphw_h($c ? ($c['driver'] ?: 'none') : 'pcieport')?></td>
+<td><?php if ($l['state'] !== 'ok'): ?><i class="fa fa-warning orange-text" aria-hidden="true"></i> <?php endif; ?><?=qnaphw_h(enclosure_link_text($l['speed'], $l['width']))?></td><td><?=qnaphw_h(enclosure_link_text($l['want_speed'], $l['want_width']))?></td>
+<td><?=qnaphw_h(implode(' / ', array_map(function ($x) { return $x === null ? '-' : (string)$x; }, $aer)))?></td></tr>
+<?php endforeach; ?>
+</tbody></table></div>
+<p class="qhw-p">Controllers: ASMedia ASM1164 (<?=qnaphw_h($u['subsystem'] !== '' ? "subsystem {$u['subsystem']}" : 'subsystem unknown')?>), AHCI capabilities <?=qnaphw_h($u['hw']['controllers'][0]['caps'] ?? '-')?>: <?=qnaphw_h(($u['hw']['controllers'][0]['ems'] ?? null) === false ? 'no enclosure management (no LED messages over SGPIO)' : 'enclosure management offered')?>, <?=qnaphw_h(($u['hw']['controllers'][0]['pmp'] ?? null) === false ? 'no port multipliers (one drive per port)' : 'port multipliers supported')?>. SES device: <?=$u['hw']['ses'] ? 'present' : 'none'?>.</p>
+
+<div class="qhw-scroll"><table class="unraid qhw-t">
+<caption class="qhw-cap"><?=qnaphw_h("$n: drives")?></caption>
+<thead><tr><th scope="col">Bay</th><th scope="col">Port</th><th scope="col">SATA link</th><th scope="col">Device</th><th scope="col">Model</th><th scope="col">Size</th><th scope="col">Firmware</th><th scope="col">Power-on hours</th><th scope="col">Reallocated</th><th scope="col">Pending</th><th scope="col">CRC errors</th></tr></thead><tbody>
+<?php foreach ($u['hw']['controllers'] as $c) foreach ($c['ports'] as $p):
+  $b = null; foreach ($u['bays'] as $x) if ($x['device'] === $p['device'] && $p['device'] !== '') $b = $x;
+  $sm = $b ? qnaphw_smart_attrs($b['slot_id']) : []; ?>
+<tr><th scope="row"><?=qnaphw_h($p['bay'] ?: '-')?></th><td><?=qnaphw_h("controller {$c['n']} port {$p['port_no']} ({$p['ata']})")?></td><td><?=qnaphw_h($p['speed'] . ($p['limit'] !== '' && $p['limit'] !== $p['speed'] ? " of {$p['limit']}" : ''))?></td>
+<td><?=qnaphw_h($p['device'] ?: '-')?></td><td><?=qnaphw_h($b['model'] ?? '')?></td><td><?=qnaphw_h($b ? qnaphw_size($b['size']) : '')?></td><td><?=qnaphw_h($p['rev'] ?: '-')?></td>
+<?php foreach (['hours', 'realloc', 'pending', 'crc'] as $k): ?><td><?=qnaphw_h(isset($sm[$k]) ? number_format($sm[$k], 0, '.', ' ') : '-')?></td><?php endforeach; ?></tr>
+<?php endforeach; ?>
+</tbody></table></div>
+<?php endforeach; ?>
+<p class="qhw-p">SMART counters are from the report Unraid saved last time it read each drive; a drive in standby keeps its last report and is not woken.</p>
+
+<div class="title"><span class="left"><i class="fa fa-stethoscope title"></i>Known issues</span><span class="qhw-sub">data of <?=qnaphw_h(qnaphw_issue_data()['updated'] ?? '-')?></span></div>
+<div class="qhw-scroll"><table class="unraid qhw-t qhw-issues">
+<thead><tr><th scope="col">Issue</th><th scope="col">On this server</th><th scope="col">What it is, what to do</th><th scope="col">Source</th></tr></thead><tbody>
+<?php foreach (qnaphw_issues($hv) as $i): ?>
+<tr><th scope="row"><?=qnaphw_h($i['title'])?></th><td><i class="fa <?=$hicon[$i['state']]?>" aria-hidden="true"></i> <?=qnaphw_h($i['status'])?></td><td><?=qnaphw_h($i['text'])?></td><td><?=qnaphw_h($i['source'])?></td></tr>
+<?php endforeach; ?>
+</tbody></table></div>
+
+<div class="title"><span class="left"><i class="fa fa-code-fork title"></i>Firmware</span></div>
+<div class="qhw-scroll"><table class="unraid qhw-t qhw-issues">
+<thead><tr><th scope="col">Part</th><th scope="col">Version</th><th scope="col">Notes</th><th scope="col">Source</th></tr></thead><tbody>
+<?php foreach (qnaphw_firmware($hv) as $f): ?>
+<tr><th scope="row"><?=qnaphw_h($f['part'])?></th><td><?=qnaphw_h($f['value'])?></td><td><?=qnaphw_h($f['text'])?></td><td><?=qnaphw_h($f['source'])?></td></tr>
+<?php endforeach; ?>
+</tbody></table></div>
+
+<div class="title"><span class="left"><i class="fa fa-ban title"></i>Fans and LEDs</span></div>
+<p class="qhw-p">This plugin does not control the enclosure's fans or LEDs, because the server has no way to reach them. The enclosure runs its fans itself, from the fan switch at the back (Auto follows its own temperature; High, Medium and Low are fixed), and drives its status and drive lights itself. The card shows no SES device and no USB link, and its controllers offer no enclosure management, so there is nothing a fan curve or an LED setting could be sent to. To find a drive, use Locate in QNAP Expansion: it flashes the drive's activity light by reading it.</p>
+</div>

@@ -1,0 +1,13 @@
+#!/bin/bash
+# qnaphw-apply - run by Unraid's /update.php after the Overview tab's settings are saved, and by the post-install.
+# Writes or removes the history sampler's cron file on the flash drive, then lets Unraid rebuild its crontab. Nothing else.
+CFG=/boot/config/plugins/qnap-hardware/qnap-hardware.cfg
+CRON=/boot/config/plugins/qnap-hardware/qnap-hardware.cron
+HISTORY=$(sed -n 's/^HISTORY="\{0,1\}\([a-z]*\)"\{0,1\}\r\{0,1\}$/\1/p' "$CFG" 2>/dev/null | tail -1)
+if [ "$HISTORY" = no ]; then
+  rm -f "$CRON"
+else
+  printf '# qnap-hardware: one temperature history sample a minute (HISTORY=yes on the Overview tab)\n* * * * * /usr/local/emhttp/plugins/qnap-hardware/scripts/qnaphw-sample >/dev/null 2>&1\n' >"$CRON"
+fi
+/usr/local/sbin/update_cron
+exit 0

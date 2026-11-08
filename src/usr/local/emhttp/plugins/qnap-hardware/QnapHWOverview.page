@@ -1,0 +1,67 @@
+Menu="QnapHW:1"
+Title="Overview"
+Tag="tachometer"
+Markdown="false"
+---
+<?php
+/* Overview: the live front view of each enclosure, one card per unit, the bay map, the settings and the plugin's health.
+ * Read-only except the settings form (Unraid's /update.php, then scripts/qnaphw-apply for the history sampler). */
+require_once "$docroot/plugins/qnap-hardware/include/qnaphw.php";
+qnaphw_head();
+$qv = qnaphw_view(); $qc = qnaphw_cfg(); $qs = qnaphw_history_state();
+$qsmart = ['healthy' => 'fa-thumbs-o-up green-text', 'error' => 'fa-thumbs-o-down orange-text', 'failed' => 'fa-thumbs-o-down red-text'];
+?>
+<div class="enc qhw" data-endpoint="/plugins/qnap-hardware/kit/enclosures.php">
+<?php if (!$qv['units']): ?>
+<div class="title"><span class="left"><i class="fa fa-th title"></i>No enclosure found</span></div>
+<p class="qhw-p">No card of a known enclosure is in this server (known: <?=qnaphw_h(implode(', ', array_map(function ($p) { return "{$p['name']} on its {$p['card']} card"; }, $qv['profiles'])))?>). The Report tab collects what this server has, for support of other units.</p>
+<?php endif; ?>
+<?php foreach ($qv['units'] as $u):
+  $temps = array_filter(array_column($u['bays'], 'temp'), 'is_int'); $hot = $temps ? max($temps) : null;
+  $hotBay = ''; foreach ($u['bays'] as $b) if ($b['temp'] === $hot && $hot !== null) { $hotBay = $b['bay']; break; }
+  $n = count(array_filter($u['bays'], function ($b) { return $b['device'] !== ''; }));
+  $sb = count(array_filter($u['bays'], function ($b) { return $b['standby']; }));
+  $bad = array_filter($u['bays'], function ($b) { return in_array($b['smart']['state'], ['error', 'failed'], true) || in_array($b['state'], ['disabled', 'missing', 'invalid'], true); });
+  $down = array_filter($u['links'], function ($l) { return $l['state'] !== 'ok'; }); ?>
+<div class="title"><span class="left"><i class="fa fa-th title"></i><?=qnaphw_h("{$u['name']} {$u['unit']}")?></span><span class="qhw-sub"><?=qnaphw_h("{$u['card']} card at {$u['switch']}")?></span></div>
+<?=enclosure_front_html($u)?>
+<dl class="qhw-facts">
+  <dt>Drives</dt><dd><?=qnaphw_h("$n in " . count($u['bays']) . ' bays' . ($sb ? ", $sb in standby" : ''))?></dd>
+  <dt>Hottest drive</dt><dd><?=qnaphw_h($hot !== null ? "$hot °C in $hotBay" : 'no reading (drives in standby are not woken)')?></dd>
+  <dt>Health</dt><dd><?php if ($bad): ?><i class="fa fa-warning orange-text" aria-hidden="true"></i> <?=qnaphw_h(implode(', ', array_map(function ($b) { return "{$b['bay']}: " . ($b['smart']['state'] === 'error' || $b['smart']['state'] === 'failed' ? "SMART {$b['smart']['text']}" : $b['state_text']); }, $bad)))?><?php else: ?><i class="fa fa-check green-text" aria-hidden="true"></i> no drive with errors<?php endif; ?></dd>
+  <dt>Card link</dt><dd><?php if ($down): ?><i class="fa fa-warning orange-text" aria-hidden="true"></i> <?=qnaphw_h(implode('; ', array_map(function ($l) { return "{$l['name']} trained down ({$l['state']})"; }, $down)))?><?php else: ?><i class="fa fa-check green-text" aria-hidden="true"></i> <?=qnaphw_h(enclosure_link_text($u['links'][0]['speed'] ?? null, $u['links'][0]['width'] ?? null))?>, all links at full speed<?php endif; ?></dd>
+  <dt>Cabling</dt><dd><?=qnaphw_h($u['confirmed'] ? 'confirmed' : 'not confirmed: confirm it with Locate in QNAP Expansion, Enclosures')?></dd>
+  <dt>Fans and LEDs</dt><dd>run by the enclosure itself; not visible to the server</dd>
+</dl>
+
+<div class="qhw-scroll"><table class="unraid qhw-t">
+<caption class="qhw-cap">Bay map of <?=qnaphw_h("{$u['name']} {$u['unit']}")?></caption>
+<thead><tr><th scope="col">Bay</th><th scope="col">Device</th><th scope="col">Slot</th><th scope="col">Model</th><th scope="col">Size</th><th scope="col">Temp.</th><th scope="col">State</th><th scope="col">SMART</th></tr></thead><tbody>
+<?php foreach ($u['bays'] as $b): ?>
+<tr><th scope="row"><?=qnaphw_h($b['bay'])?></th>
+<?php if ($b['device'] === ''): ?><td colspan="7">empty</td>
+<?php else: ?><td><?=qnaphw_h($b['device'])?></td><td><?=qnaphw_h($b['slot'] ?: '-')?></td><td><?=qnaphw_h($b['model'])?></td><td><?=qnaphw_h(qnaphw_size($b['size']))?></td>
+<td><?=qnaphw_h(enclosure_temp_text($b))?></td><td><i class="fa <?=ENCLOSURE_ICON[$b['state']] ?? ''?>" aria-hidden="true"></i> <?=qnaphw_h($b['state_text'])?></td>
+<td title="<?=qnaphw_h($b['smart']['title'])?>"><?php if (isset($qsmart[$b['smart']['state']])): ?><i class="fa <?=$qsmart[$b['smart']['state']]?>" aria-hidden="true"></i> <?php endif; ?><?=qnaphw_h($b['smart']['text'])?></td><?php endif; ?></tr>
+<?php endforeach; ?>
+</tbody></table></div>
+<?php endforeach; ?>
+
+<form class="qhw-set" method="POST" action="/update.php" target="progressFrame">
+<input type="hidden" name="#file" value="qnap-hardware/qnap-hardware.cfg">
+<input type="hidden" name="#command" value="/plugins/qnap-hardware/scripts/qnaphw-apply">
+<fieldset><legend>Settings</legend>
+<div class="qhw-field"><label for="qhw-set-badges">Bay labels on the Main page</label>
+<select id="qhw-set-badges" name="MAIN_BADGES" aria-describedby="qhw-badges-help"><option value="yes"<?=$qc['MAIN_BADGES'] === 'yes' ? ' selected' : ''?>>Yes</option><option value="no"<?=$qc['MAIN_BADGES'] === 'no' ? ' selected' : ''?>>No</option></select></div>
+<p class="qhw-p" id="qhw-badges-help">Shows the bay after each drive's name on the Main page, ex. "HDD3", so a drive in the list is found in the enclosure. Visual only; reload the Main page after Apply.</p>
+<div class="qhw-field"><label for="qhw-set-history">Temperature history</label>
+<select id="qhw-set-history" name="HISTORY" aria-describedby="qhw-history-help"><option value="yes"<?=$qc['HISTORY'] === 'yes' ? ' selected' : ''?>>Yes</option><option value="no"<?=$qc['HISTORY'] === 'no' ? ' selected' : ''?>>No</option></select></div>
+<p class="qhw-p" id="qhw-history-help">Once a minute, notes the temperature Unraid last read of each drive in a bay, for the History tab (ex. No, if you do not need the graphs: nothing then runs in the background). Kept in RAM for 24 hours; no drive is woken.</p>
+<div class="qhw-field"><input type="submit" value="Apply"></div>
+</fieldset>
+</form>
+
+<div class="title"><span class="left"><i class="fa fa-heartbeat title"></i>Plugin health</span></div>
+<p class="qhw-p"><?php if ($qc['HISTORY'] === 'no'): ?>Temperature history is off.<?php elseif (!$qs['last']): ?><i class="fa fa-info-circle" aria-hidden="true"></i> No history sample yet: the first one is taken within a minute of the install or a boot.<?php else: $age = time() - $qs['last']; ?><i class="fa <?=$age > 180 ? 'fa-warning orange-text' : 'fa-check green-text'?>" aria-hidden="true"></i> Last history sample <?=qnaphw_h($age < 120 ? "$age s ago" : round($age / 60) . ' min ago')?>, <?=qnaphw_h($qs['samples'])?> samples kept.<?php endif; ?></p>
+</div>
+<script src="/plugins/qnap-hardware/kit/enclosures.js?v=<?=qnaphw_h(substr((string)@md5_file("$docroot/plugins/qnap-hardware/kit/enclosures.js"), 0, 10))?>"></script>
