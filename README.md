@@ -15,7 +15,7 @@ This plugin works on its own; both read the same enclosure profile and share the
 
 | | |
 |---|---|
-| Overview | a live front view of the enclosure as its bays are labelled (HDD1-HDD12, SSD1-SSD4), each drive with its Unraid slot, temperature and state as Unraid last read them, redrawn every 10 seconds; one card per unit; the bay map. No drive is woken |
+| Overview | a live drawing of the enclosure as it looks, front and rear, with its bays as labelled (HDD1-HDD12, SSD1-SSD4), each drive with its Unraid slot, temperature and state as Unraid last read them, redrawn every 10 seconds; one card per unit; the bay map. No drive is woken |
 | Main page | the bay ("HDD3") after each drive's name (setting on the Overview tab) |
 | History | drive temperatures per bay over 1, 6 or 24 hours, one sample a minute kept in RAM, with the same numbers as a table (on by default; set it to No on the Overview tab and nothing runs in the background) |
 | Hardware | the card's PCIe links and error counters, the controllers' capabilities, each drive's SATA link, firmware and SMART counters; known issues checked against your server; what firmware can and cannot be read |
@@ -33,7 +33,7 @@ The TL-D1600S on the QXP-1600eS-A1164 card. Other QNAP enclosures and cards are 
 
 Taken in the offline test harness with made-up test data.
 
-Overview: the front view.
+Overview: the unit drawn as it looks, front and rear.
 
 ![Front view](docs/screenshots/qnap-hardware-overview-black.png)
 

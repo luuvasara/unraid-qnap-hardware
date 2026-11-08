@@ -65,11 +65,23 @@
     /* the live front view: every 10 s while the page is visible, the trays are redrawn from action=view */
     var STATES = ['active', 'new', 'standby', 'invalid', 'disabled', 'missing', 'unknown', 'empty'];
     function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
+    function svgTray(g, b) {   // a tray of the drawing: same children for every state, only texts and classes change
+      var set = function (cls, t) { var e = g.querySelector('.' + cls); if (e) e.textContent = t; };
+      var tt = g.querySelector('title'); if (tt) tt.textContent = b.text;
+      var bad = b.smart === 'error' || b.smart === 'failed';
+      g.classList.toggle('enc-smart-bad', !!b.device && bad);
+      set('enc-t-temp', typeof b.temp_short === 'string' ? b.temp_short : '');
+      set('enc-t-dev', b.device || 'empty');
+      var slot = b.device ? (b.slot || '-') : '', max = g.classList.contains('enc-tray-s') ? 6 : 8;
+      set('enc-t-slot', slot.length > max ? slot.slice(0, max - 1) + '\u2026' : slot);
+    }
     function tray(li, b) {
       var state = STATES.indexOf(b.state) >= 0 ? b.state : 'unknown';
       STATES.forEach(function (s) { li.classList.remove('enc-' + s); });
       li.classList.add('enc-' + state);
-      li.title = b.text; li.setAttribute('aria-label', b.text); li.dataset.encDev = b.device;
+      li.setAttribute('aria-label', b.text); li.dataset.encDev = b.device;
+      if (li instanceof SVGElement) { svgTray(li, b); return; }
+      li.title = b.text;
       var name = li.querySelector('.enc-bay-name'), keep = name ? name.textContent : li.dataset.encBay;
       while (li.firstChild) li.removeChild(li.firstChild);
       li.appendChild(el('span', 'enc-bay-name', keep));

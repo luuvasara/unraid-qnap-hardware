@@ -86,5 +86,311 @@
     "Drive temperatures and SMART: the values Unraid reads from each drive, as for any other drive.",
     "Firmware: the enclosure's LCD shows its name and firmware version (press Enter). Updating it needs QNAP's own JBOD Manager; nothing here writes to the enclosure.",
     "Power: switch the enclosure on before the server, as QNAP's guide describes."
-  ]
+  ],
+  "panel": {
+    "source": "QNAP TL-D400S/D800S/D1600S user guide (tl-dx00s-ug-04-en.pdf, version 4, 03/07/2020): front panel p.7 (Enter and Select buttons right of the LCD panel, status, link and fan error LEDs under it, drive LEDs in a strip between the two rows), rear panel p.9 (power switch, audio alert switch, SFF-8088 ports 1 to 4 top to bottom, fan speed switch, Kensington slot; three system fans; power input), drive numbering p.11; QNAP's product photo. All trays stand upright. Units: the guide's drawing at half size; schematic, not to scale.",
+    "front": {
+      "size": [
+        577,
+        452
+      ],
+      "body": [
+        0,
+        0,
+        577,
+        441
+      ],
+      "trays": [
+        {
+          "bays": [
+            "HDD9",
+            "HDD10",
+            "HDD11",
+            "HDD12"
+          ],
+          "x": 11,
+          "y": 27,
+          "w": 49,
+          "h": 182,
+          "step": 52,
+          "led": "below"
+        },
+        {
+          "bays": [
+            "SSD1",
+            "SSD2",
+            "SSD3",
+            "SSD4"
+          ],
+          "x": 253,
+          "y": 91,
+          "w": 29,
+          "h": 118,
+          "step": 31.5,
+          "led": "below"
+        },
+        {
+          "bays": [
+            "HDD1",
+            "HDD2",
+            "HDD3",
+            "HDD4",
+            "HDD5",
+            "HDD6",
+            "HDD7",
+            "HDD8"
+          ],
+          "x": 10.5,
+          "y": 247,
+          "w": 49,
+          "h": 185,
+          "step": 51.6,
+          "led": "above"
+        }
+      ],
+      "parts": [
+        {
+          "type": "cage",
+          "box": [
+            6,
+            5,
+            214,
+            208
+          ]
+        },
+        {
+          "type": "cage",
+          "box": [
+            249,
+            82,
+            135,
+            131
+          ]
+        },
+        {
+          "type": "strip",
+          "box": [
+            6,
+            214,
+            420,
+            28
+          ]
+        },
+        {
+          "type": "lcd",
+          "box": [
+            262,
+            21,
+            105,
+            36
+          ],
+          "title": "LCD panel: shows the enclosure's name, firmware and messages (Enter, Select). The server cannot read it."
+        },
+        {
+          "type": "buttons",
+          "box": [
+            385,
+            22,
+            12,
+            34
+          ],
+          "title": "Enter and Select buttons of the LCD panel"
+        },
+        {
+          "type": "leds",
+          "y": 73,
+          "x": [
+            281,
+            300,
+            319
+          ],
+          "names": [
+            "status",
+            "link",
+            "fan"
+          ],
+          "titles": [
+            "Status LED: green = ready; red = a system fan stopped or the enclosure is too hot",
+            "Link LED: green = a host is connected",
+            "Fan error LED: red = a system fan stopped"
+          ]
+        },
+        {
+          "type": "side",
+          "box": [
+            435,
+            49,
+            136,
+            372
+          ],
+          "text": "TL-D1600S"
+        }
+      ]
+    },
+    "rear": {
+      "size": [
+        577,
+        452
+      ],
+      "body": [
+        0,
+        0,
+        577,
+        441
+      ],
+      "parts": [
+        {
+          "type": "recess",
+          "box": [
+            14,
+            14,
+            280,
+            74
+          ]
+        },
+        {
+          "type": "grille",
+          "box": [
+            16,
+            112,
+            46,
+            320
+          ]
+        },
+        {
+          "type": "switch",
+          "box": [
+            96,
+            138,
+            22,
+            15
+          ],
+          "label": "power",
+          "title": "Power switch"
+        },
+        {
+          "type": "switch",
+          "box": [
+            106,
+            171,
+            8,
+            15
+          ],
+          "label": "buzzer",
+          "title": "Audio alert switch (the enclosure's buzzer on or off)"
+        },
+        {
+          "type": "sff",
+          "group": "1",
+          "box": [
+            104,
+            220,
+            15,
+            22
+          ]
+        },
+        {
+          "type": "sff",
+          "group": "2",
+          "box": [
+            104,
+            245,
+            15,
+            22
+          ]
+        },
+        {
+          "type": "sff",
+          "group": "3",
+          "box": [
+            104,
+            302,
+            15,
+            22
+          ]
+        },
+        {
+          "type": "sff",
+          "group": "4",
+          "box": [
+            104,
+            327,
+            15,
+            22
+          ]
+        },
+        {
+          "type": "switch",
+          "box": [
+            106,
+            375,
+            8,
+            15
+          ],
+          "label": "fan mode",
+          "title": "Fan speed switch: Auto, High, Medium or Low. The server cannot read its position."
+        },
+        {
+          "type": "lock",
+          "box": [
+            148,
+            400,
+            13,
+            22
+          ],
+          "title": "Kensington security slot"
+        },
+        {
+          "type": "fan",
+          "c": [
+            264,
+            186
+          ],
+          "r": 66
+        },
+        {
+          "type": "fan",
+          "c": [
+            462,
+            121
+          ],
+          "r": 66
+        },
+        {
+          "type": "fan",
+          "c": [
+            462,
+            272
+          ],
+          "r": 66
+        },
+        {
+          "type": "psu",
+          "c": [
+            362,
+            398
+          ],
+          "r": 34
+        },
+        {
+          "type": "inlet",
+          "box": [
+            424,
+            374,
+            32,
+            38
+          ],
+          "title": "Power input (AC in)"
+        },
+        {
+          "type": "buzzer",
+          "c": [
+            518,
+            394
+          ],
+          "r": 22
+        }
+      ]
+    }
+  }
 }

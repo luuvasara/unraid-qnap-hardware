@@ -34,8 +34,9 @@
     box.textContent = '';
     if (!j.units.length || !j.units.some(function (u) { return u.t.length; })) { say('No samples in this range yet. The first one is taken within a minute after the install or a boot (Overview, Temperature history must be Yes).'); return; }
     say('');
+    var xEnd = typeof j.now === 'number' ? j.now : Date.now() / 1000, xSpan = typeof j.range === 'number' && j.range > 0 ? j.range : Number(range());
     j.units.forEach(function (u) {
-      var sec = el('section', 'qhw-hist'), h = el('h3', 'qhw-cap', u.name + ': drive temperatures (°C), ' + u.t.length + ' samples');
+      var sec = el('section', 'qhw-hist'), h = el('h3', 'qhw-cap', u.name + ': drive temperatures (°C), ' + u.t.length + (u.t.length === 1 ? ' sample' : ' samples'));
       h.id = 'qhw-hist-h-' + u.unit; sec.appendChild(h);
       var holder = el('div', 'qhw-chart'); holder.setAttribute('role', 'img'); holder.setAttribute('aria-labelledby', h.id);
       holder.setAttribute('aria-describedby', 'qhw-hist-t-' + u.unit);
@@ -45,8 +46,9 @@
       var fg = getComputedStyle(root).color;
       var opts = {
         width: Math.max(320, Math.min(holder.clientWidth || 900, 1200)), height: 300,
-        scales: { x: { time: true } },
-        axes: [{ stroke: fg, grid: { stroke: 'rgba(128,128,128,.25)' } }, { stroke: fg, grid: { stroke: 'rgba(128,128,128,.25)' }, values: function (s, v) { return v.map(function (x) { return x + ' °C'; }); } }],
+        // the x axis is always the chosen range ending now: uPlot's own range from the data spans years when there is only one sample
+        scales: { x: { time: true, range: function () { return [xEnd - xSpan, xEnd]; } } },
+        axes: [{ stroke: fg, grid: { stroke: 'rgba(128,128,128,.25)' } }, { stroke: fg, size: 64, grid: { stroke: 'rgba(128,128,128,.25)' }, values: function (s, v) { return v.map(function (x) { return x + ' °C'; }); } }],
         series: [{}].concat(u.series.map(function (s, i) { return { label: s.label, stroke: PALETTE[i % PALETTE.length], width: 2, spanGaps: false, value: function (x, v) { return v == null ? '-' : v + ' °C'; } }; })),
         legend: { live: true }
       };

@@ -99,7 +99,8 @@ class DriveEnclosures {
    * 'confirmed' => bool, 'controllers' => [addr, ...], 'groups' => profile groups,
    * 'front' => [[['bay' => 'HDD9', 'key' => drive key or null], ...], ...], 'unplaced' => [drive keys with no bay],
    * 'card' => profile card name, 'subsystem' => the controllers' subsystem id, 'kinds' => profile bay_kinds (bay name
-   * prefix => kind, "SSD" => "2.5in"), 'notes' => profile host_view (what a host can and cannot see of the enclosure)], ...] */
+   * prefix => kind, "SSD" => "2.5in"), 'notes' => profile host_view (what a host can and cannot see of the enclosure),
+   * 'panel' => profile panel (where the trays and the parts sit on the front and the rear, for the drawing; [] if none)], ...] */
   public function units(array $places): array {
     $out = [];
     foreach ($this->profiles() as $p) {
@@ -118,7 +119,7 @@ class DriveEnclosures {
                   'subsystem' => $this->pciSubsystem($ctls[0]), 'cabling' => $cab, 'confirmed' => $confirmed,
                   'kinds' => (array)($p['bay_kinds'] ?? []), 'notes' => array_values(array_map('strval', (array)($p['host_view'] ?? []))),
                   'ports_known' => is_array($p['calibration']['port_to_position']), 'controllers' => $ctls, 'groups' => $p['groups'],
-                  'front' => $front, 'unplaced' => $unplaced];
+                  'front' => $front, 'unplaced' => $unplaced, 'panel' => is_array($p['panel'] ?? null) ? $p['panel'] : []];
       }
     }
     return $out;
