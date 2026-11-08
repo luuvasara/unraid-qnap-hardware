@@ -2,12 +2,12 @@
 <!DOCTYPE PLUGIN [
   <!ENTITY name    "qnap-hardware">
   <!ENTITY author  "QNAP Hardware project">
-  <!ENTITY version "2026.11.08a">
+  <!ENTITY version "2026.11.08b">
   <!ENTITY gitURL  "https://raw.githubusercontent.com/luuvasara/unraid-qnap-hardware/main">
   <!ENTITY pluginURL "&gitURL;/qnap-hardware.plg">
   <!ENTITY pkg     "qnap-hardware-&version;-x86_64-1.txz">
   <!ENTITY pkgURL  "&gitURL;/packages/&pkg;">
-  <!ENTITY md5     "e02e27f5ddcf35730bb3f664daa6ed84">
+  <!ENTITY md5     "b2da65e839adcac65d990be56476391c">
 ]>
 <!-- QNAP Hardware: the overview, history, inventory and report of a QNAP TL-D1600S JBOD enclosure. The enclosure geometry is a
      profile of the plugin kit; the pages read sysfs and Unraid's own state. One cron line (a history sample a minute, RAM only)
@@ -15,6 +15,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" min="6.12.0" launch="Utilities/QnapHW" icon="qnap-hardware.png" pluginURL="&pluginURL;">
 
 <CHANGES>
+###2026.11.08b
+- Hardware tab: the page no longer stops before its known issues; the Overview and the other tabs were blank on a real server.
+
 ###2026.11.08a
 - First version. Utilities, QNAP Hardware, for a QNAP TL-D1600S on its QXP-1600eS-A1164 card.
 - Overview: a live front view of the enclosure as its bays are labelled (HDD1-HDD12, SSD1-SSD4), each drive with its Unraid slot, temperature and state as Unraid last read them (no drive is woken), redrawn every 10 seconds; one card per unit (drives, hottest drive, health, card link, cabling); the bay map.

@@ -17,7 +17,7 @@ This plugin works on its own; both read the same enclosure profile and share the
 |---|---|
 | Overview | a live front view of the enclosure as its bays are labelled (HDD1-HDD12, SSD1-SSD4), each drive with its Unraid slot, temperature and state as Unraid last read them, redrawn every 10 seconds; one card per unit; the bay map. No drive is woken |
 | Main page | the bay ("HDD3") after each drive's name (setting on the Overview tab) |
-| History | drive temperatures per bay over 1, 6 or 24 hours, one sample a minute kept in RAM, with the same numbers as a table (setting on the Overview tab: off, and nothing runs in the background) |
+| History | drive temperatures per bay over 1, 6 or 24 hours, one sample a minute kept in RAM, with the same numbers as a table (on by default; set it to No on the Overview tab and nothing runs in the background) |
 | Hardware | the card's PCIe links and error counters, the controllers' capabilities, each drive's SATA link, firmware and SMART counters; known issues checked against your server; what firmware can and cannot be read |
 | Report | a read-only hardware report, anonymised on the server (serials, MACs, WWNs, UUIDs, labels, hostname, IPs, user names become placeholders), to copy, download or open as an issue here |
 

@@ -76,10 +76,10 @@ $enc_v = substr(md5((string)@md5_file("$enc_root/enclosures.js") . @md5_file("$e
 <form class="enc-cab" data-enc="cabling" data-switch="<?=$enc_h($u['switch'])?>">
 <fieldset><legend><?=$u['confirmed'] ? 'Cabling' : 'Confirm the cabling'?></legend>
 <p class="enc-p">Each controller of the card serves one cable, and each cable feeds one group of bays. ex. Locate the drive shown in HDD1: if the light flashes in HDD5 instead, pick HDD5-HDD8 for that drive's controller. Saved in <code>/boot/config/plugins/<?=$enc_h($enc_slug)?>/enclosures.json</code>.</p>
-<?php foreach ($u['controllers'] as $i => $ctl): ?>
-<div class="enc-field"><label for="enc-cab-<?=$uid?>-<?=$i?>">Controller <?=$i + 1?> (<?=$enc_h($ctl)?>) feeds</label>
-<select id="enc-cab-<?=$uid?>-<?=$i?>" name="order[]">
-<?php foreach ($u['groups'] as $gk => $bays): ?><option value="<?=$enc_h($gk)?>"<?=((string)($u['cabling'][$i] ?? '') === (string)$gk) ? ' selected' : ''?>><?=$enc_h(reset($bays) . '-' . end($bays))?></option><?php endforeach; ?>
+<?php foreach ($u['controllers'] as $enc_ci => $ctl): ?>
+<div class="enc-field"><label for="enc-cab-<?=$uid?>-<?=$enc_ci?>">Controller <?=$enc_ci + 1?> (<?=$enc_h($ctl)?>) feeds</label>
+<select id="enc-cab-<?=$uid?>-<?=$enc_ci?>" name="order[]">
+<?php foreach ($u['groups'] as $gk => $bays): ?><option value="<?=$enc_h($gk)?>"<?=((string)($u['cabling'][$enc_ci] ?? '') === (string)$gk) ? ' selected' : ''?>><?=$enc_h(reset($bays) . '-' . end($bays))?></option><?php endforeach; ?>
 </select></div>
 <?php endforeach; ?>
 <div class="enc-field"><input type="submit" value="<?=$u['confirmed'] ? 'Save cabling' : 'Confirm cabling'?>"> <span data-enc="cabout" role="status" aria-live="polite"></span></div>

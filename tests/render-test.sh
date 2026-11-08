@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC2015
+# shellcheck disable=SC2015,SC2016  # "check && ok || bad" is the test idiom; php -r code is single-quoted on purpose
 # The pages of the built package with Unraid's real stylesheets in headless Chrome, on the made-up server of mkserver.sh, in
 # all four themes; the history and report endpoints; the Main page labels' endpoint. OUT=<dir> keeps the screenshots.
 set -uo pipefail

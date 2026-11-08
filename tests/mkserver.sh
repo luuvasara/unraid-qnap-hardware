@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2015,SC2016  # "check && ok || bad" is the test idiom; php -r code is single-quoted on purpose
 # mkserver.sh <dir> - a made-up server with a TL-D1600S for the tests: the kit's enclosure fixture (PCI ids, links, cabling and
 # contents of a measured unit, invented serials), Unraid's state files, a day of temperature history, /etc and /proc bits for
 # the report, and stub lspci/lsusb/dmesg in <dir>/bin that print the card's lspci output as read on the unit.

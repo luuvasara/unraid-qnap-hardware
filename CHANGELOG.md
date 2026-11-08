@@ -2,6 +2,9 @@
 
 Copied by the build from the <CHANGES> block of qnap-hardware.plg; edit the .plg, not this file.
 
+## 2026.11.08b
+- Hardware tab: the page no longer stops before its known issues; the Overview and the other tabs were blank on a real server.
+
 ## 2026.11.08a
 - First version. Utilities, QNAP Hardware, for a QNAP TL-D1600S on its QXP-1600eS-A1164 card.
 - Overview: a live front view of the enclosure as its bays are labelled (HDD1-HDD12, SSD1-SSD4), each drive with its Unraid slot, temperature and state as Unraid last read them (no drive is woken), redrawn every 10 seconds; one card per unit (drives, hottest drive, health, card link, cabling); the bay map.

@@ -51,8 +51,8 @@ $huv = @parse_ini_file(qnaphw_root() . '/etc/unraid-version') ?: [];
 <div class="title"><span class="left"><i class="fa fa-stethoscope title"></i>Known issues</span><span class="qhw-sub">data of <?=qnaphw_h(qnaphw_issue_data()['updated'] ?? '-')?></span></div>
 <div class="qhw-scroll"><table class="unraid qhw-t qhw-issues">
 <thead><tr><th scope="col">Issue</th><th scope="col">On this server</th><th scope="col">What it is, what to do</th><th scope="col">Source</th></tr></thead><tbody>
-<?php foreach (qnaphw_issues($hv) as $i): ?>
-<tr><th scope="row"><?=qnaphw_h($i['title'])?></th><td><i class="fa <?=$hicon[$i['state']]?>" aria-hidden="true"></i> <?=qnaphw_h($i['status'])?></td><td><?=qnaphw_h($i['text'])?></td><td><?=qnaphw_h($i['source'])?></td></tr>
+<?php foreach (qnaphw_issues($hv) as $qhw_issue): ?>
+<tr><th scope="row"><?=qnaphw_h($qhw_issue['title'])?></th><td><i class="fa <?=$hicon[$qhw_issue['state']]?>" aria-hidden="true"></i> <?=qnaphw_h($qhw_issue['status'])?></td><td><?=qnaphw_h($qhw_issue['text'])?></td><td><?=qnaphw_h($qhw_issue['source'])?></td></tr>
 <?php endforeach; ?>
 </tbody></table></div>
 
