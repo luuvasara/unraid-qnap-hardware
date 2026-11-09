@@ -31,7 +31,7 @@ The TL-D1600S on the QXP-1600eS-A1164 card. Other QNAP enclosures and cards are 
 
 ## Screenshots
 
-Taken in the offline test harness with made-up test data.
+Taken in the offline test harness with example data.
 
 Overview: the unit drawn as it looks, front and rear.
 
